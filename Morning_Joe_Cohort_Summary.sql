@@ -1,6 +1,7 @@
 with mj as (select adobe_tracking_id,
 variant
-from  `nbcu-ds-sandbox-a-001.ab_userlists.morning_news_userlist`),
+from  `nbcu-ds-sandbox-a-001.ab_userlists.morning_news_userlist`
+where DATE(timestamp(bucketed_timestamp), "America/New_York") between "2023-03-21" and "2023-03-28"),
 
 cte1 as (
 select adobe_tracking_id,
@@ -27,7 +28,7 @@ group by 1
 select variant, 
 round(AVG(Days),2) as Avg_Days_Watched, 
 round(AVG(Watched_Hours),2) as Avg_Hours_Watched, 
-AVG(Repertoires) as Avg_Repertoires_Numbers
+round(AVG(Repertoires),2) as Avg_Repertoires_Numbers
 from cte2
 left join mj on cte2.adobe_tracking_id = mj.adobe_tracking_id
 group by 1
